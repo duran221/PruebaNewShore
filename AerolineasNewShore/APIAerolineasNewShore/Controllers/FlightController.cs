@@ -35,6 +35,15 @@ namespace APIAerolineasNewShore.Controllers
 
         }
 
-      
+        [System.Web.Http.HttpGet]
+        public IHttpActionResult Get()
+        {
+           
+                return Ok("201");
+
+        }
+
+
+
     }
 }

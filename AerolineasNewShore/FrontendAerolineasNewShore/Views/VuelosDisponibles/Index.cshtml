@@ -80,12 +80,24 @@
         <tbody>
             @foreach (var flight in Model.DataFlight)
             {
-                <tr>
-                    <td> @Model.FlightsName[flight.DepartureStation]</td>
-                    <td> @Model.FlightsName[flight.ArrivalStation]</td>
-                    <th>@flight.DepartureDate</th>
-                    <td>Acciones</td>
-                </tr>
+            <tr>
+                <td> @Model.FlightsName[flight.DepartureStation]</td>
+                <td> @Model.FlightsName[flight.ArrivalStation]</td>
+                <td>@flight.DepartureDate</td>
+                @using (Html.BeginForm("Create", "VuelosDisponibles",FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.HiddenFor(model => model.FlightInsert.DepartureDate, new {Value = flight.DepartureDate });
+                    @Html.HiddenFor(model => model.FlightInsert.DepartureStation, new { Value = flight.DepartureStation });
+                    @Html.HiddenFor(model => model.FlightInsert.ArrivalStation, new { Value = flight.ArrivalStation });
+                    @Html.HiddenFor(model => model.FlightInsert.Currency, new { Value = flight.Currency });
+                    @Html.HiddenFor(model => model.FlightInsert.FlightNumber, new { Value = flight.FlightNumber });
+                    @Html.HiddenFor(model => model.FlightInsert.Price, new { Value = flight.Price });
+                    <td><input type="submit"  value="Continuar" class="btn btn-success" /></td>
+
+                }
+
+
+            </tr>
             }
 
         </tbody>

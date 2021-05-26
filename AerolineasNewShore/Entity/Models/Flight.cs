@@ -12,7 +12,7 @@ namespace Entity.Models
         [Key]
         public int IdFlight { get; set; }
         public string DepartureStation { get; set; }
-        public string ArribalStation { get; set; }
+        public string ArrivalStation { get; set; }
         public DateTime DepartureDate { get; set; }
         public virtual Transport Transport { get; set; }
         public decimal Price { get; set; }

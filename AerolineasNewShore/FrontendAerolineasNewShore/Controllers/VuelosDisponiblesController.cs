@@ -14,6 +14,7 @@ namespace FrontendAerolineasNewShore.Controllers
     {
 
         private readonly IService _serviceRequest;
+        private readonly string URLAPI = "http://localhost:50430/api";
 
         public VuelosDisponiblesController(IService service)
         {
@@ -31,7 +32,7 @@ namespace FrontendAerolineasNewShore.Controllers
         {
             
             DateTime date = Convert.ToDateTime(collection["From"]);
-            if (date < DateTime.Now.Date)
+            if (date < DateTime.Now.Date && (collection["Origin"] == collection["Destination"]) )
             {
                
                 ViewBag.Message = "La fecha proporcionada debe ser mayor o igual a la fecha actual";
@@ -54,26 +55,48 @@ namespace FrontendAerolineasNewShore.Controllers
             return View("~/Views/VuelosDisponibles/Index.cshtml",flight);
         }
 
-        // GET: VuelosDisponibles/Create
-        public ActionResult Create()
-        {
-
-            return View();
-        }
+      
 
         // POST: VuelosDisponibles/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(FormCollection form)
         {
             try
             {
-                // TODO: Add insert logic here
+                
+                DataFlightModel flightData = new DataFlightModel()
+                {
+                    DepartureDate = form["FlightInsert.DepartureDate"],
+                    DepartureStation = form["FlightInsert.DepartureStation"],
+                    ArrivalStation = form["FlightInsert.ArrivalStation"],
+                    Currency = form["FlightInsert.Currency"],
+                    FlightNumber = form["FlightInsert.FlightNumber"],
+                    Price = decimal.Parse(form["FlightInsert.Price"])
 
-                return RedirectToAction("Index");
+                };
+
+                var urlAction = $"{this.URLAPI}/Flight/Post";
+                var responseServer = _serviceRequest.Send<DataFlightModel>(urlAction, flightData);
+                string codeResponse = responseServer.Data.ToString().Replace("\"", "");
+
+                if (codeResponse.Equals("201"))
+                {
+                    ViewBag.Message = "El registro ha sido exitoso";
+                    return View("~/Views/VuelosDisponibles/Index.cshtml");
+                }
+                else
+                {
+                    ViewBag.Message = "El registro no creado, aségurese de que su email no esté previamente registrado o que su documento";
+                }
+
+                return View("~/Views/VuelosDisponibles/Index.cshtml");
+
+                // TODO: Add insert logic here
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View("~/Views/VuelosDisponibles/Index.cshtml");
+
             }
         }
 
