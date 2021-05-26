@@ -2,6 +2,7 @@
 using Entity.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,8 @@ namespace Business.Services
 
                 }catch(Exception ex)
                 {
+                    Logger logger = LogManager.GetCurrentClassLogger();
+                    logger.Error(ex,"Ocurrió un error durante la insersión en base de datos");
                     return false;
                 }
             }

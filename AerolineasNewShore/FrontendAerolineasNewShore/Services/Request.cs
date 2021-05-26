@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,14 +14,20 @@ namespace FrontendAerolineasNewShore.Services
 {
     public class Request : IService
     {     
-
+        /// <summary>
+        /// Genera una petición a un recurso en la red usando HTTP:
+        /// </summary>
+        /// <typeparam name="T">Objeto genérico con la carga útil de la petición</typeparam>
+        /// <param name="url">URI del recurso solicitado</param>
+        /// <param name="objectRequest"></param>
+        /// <param name="method">POST-GET-DELETE-PUT</param>
+        /// <returns>Objeto Response con la información obtenida desde el servicio</returns>
         public  Response Send<T>(string url, T objectRequest, string method = "POST")
         {
             Response responseApi = new Response();
             try
             {
 
-                //serializamos el objeto en una cadena JSON: 
                 string json = JsonConvert.SerializeObject(objectRequest);
 
                 WebRequest request = CrearRequest(url, method, json);
@@ -29,19 +36,22 @@ namespace FrontendAerolineasNewShore.Services
 
                 string result = LeerArchivo(httpResponse);
                 responseApi.Success = 200;
-                //y aquí va nuestra respuesta, la cual es lo que nos regrese el sitio solicitado
                 responseApi.Data = result;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                responseApi.Success = 0;
-                //en caso de error lo manejamos en el mensaje
-                responseApi.Message = e.Message;
+                responseApi.Success = 500;
+                Logger logger = LogManager.GetCurrentClassLogger();
+                logger.Error(ex, "Ocurrió un error al intentar solicitar el recurso HTTP");
+                responseApi.Message = ex.Message;
             }
 
             return responseApi;
         }
 
+        /// <summary>
+        /// Construye una petición HTTP
+        /// </summary>
         public WebRequest CrearRequest(string url, string method, string json)
         {
             //Instanciación del objeto que me permite realizar la petición a el web service (http).
@@ -50,8 +60,8 @@ namespace FrontendAerolineasNewShore.Services
             request.Method = method;
             request.PreAuthenticate = true;
             request.ContentType = "application/json;charset=utf-8'";
-            request.Timeout = 9000000; //esto es opcional
-                                       //Se escribe el objeto JSON en el objeto request:
+            request.Timeout = 9000000; //Tiempo máximo en espera a una respuesta
+                                    
             request = EscribirArchivo(json, request);
 
             return request;
