@@ -81,7 +81,7 @@ Si la inserción ha sido exitosa deberá obtener un mensaje indicando la inserci
 
 En base de datos:
 La inserción puede ser corroborada consultando la tabla 'Flights':
-![](/DOC/preview12.JPG)
+![](/DOC/preview12_1.JPG)
 
 
 ## Ejecución de Pruebas: 
