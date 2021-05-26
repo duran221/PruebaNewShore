@@ -92,4 +92,4 @@ ejecutar pruebas de NUNIT así como tener correctamente configurada la cadena de
 
 
 ### Notes
-Cualquier Duda o inquietud favor ponerse en contacto vía correo electrónico.. Gracias.
+Cualquier Duda o inquietud favor ponerse en contacto vía correo electrónico, Gracias.
