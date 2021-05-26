@@ -23,6 +23,8 @@ namespace FrontendAerolineasNewShore.Models
         public string From { get; set; }
         public LinkedList<DataFlightModel> DataFlight { get; set; }
 
+        public DataFlightModel FlightInsert { get; set; }
+
         public FlightModel()
         {
             this.FlightsName = new Dictionary<string, string>();

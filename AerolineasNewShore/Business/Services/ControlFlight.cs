@@ -27,6 +27,7 @@ namespace Business.Services
                     var responseJSON = JsonConvert.DeserializeObject(flight.ToString()).ToString();
                     Flight dataFlight = JsonConvert.DeserializeObject<Flight>(responseJSON);
                     db.Flight.Add(dataFlight);
+                    db.SaveChanges();
 
                     return true;
 
