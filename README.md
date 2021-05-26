@@ -42,9 +42,12 @@ Clone la solución proporcionada en este repositorio y abra el IDE de Visual Stu
 
 
 Abra el asistete de bases de datos, se aconseja usar **Microsoft SQL Server Management Studio** y cree una base de datos con el nombre **NewShoreDB**
-![](/DOC/preview5.JPG)
+
+![](/DOC/preview5_1.JPG)
+
 
 ![](/DOC/preview6.JPG)
+
 
 Ahora, debe configurar los archivos de cadena de conexión con la base de datos en los proyectos **Entity** , **APIAerolineasNewShore** y **TestAerolineasNewShore** En el archivo App.Config y Web.Config respectivamente, asegúrese de establecer los parámetros de host, contexto, base de datos, usuario y contraseña, esto es especialmente importante a la hora de correr los servicios más adelante
 ![](/DOC/preview7.JPG)
