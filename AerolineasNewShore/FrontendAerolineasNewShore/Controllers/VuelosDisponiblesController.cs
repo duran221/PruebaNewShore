@@ -1,6 +1,7 @@
 ﻿using FrontendAerolineasNewShore.Models;
 using FrontendAerolineasNewShore.Services;
 using Newtonsoft.Json;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,7 +13,7 @@ namespace FrontendAerolineasNewShore.Controllers
 {
     public class VuelosDisponiblesController : Controller
     {
-
+        //Servicio que permite resolver las solicitudes realizadas a un recurso http:
         private readonly IService _serviceRequest;
         private readonly string URLAPI = "http://localhost:50430/api";
 
@@ -30,29 +31,33 @@ namespace FrontendAerolineasNewShore.Controllers
         // GET: VuelosDisponibles/Details/5
         public ActionResult Details(FormCollection collection)
         {
-            
             DateTime date = Convert.ToDateTime(collection["From"]);
-            if (date < DateTime.Now.Date && (collection["Origin"] == collection["Destination"]) )
+            if (date < DateTime.Now.Date || (collection["Origin"] == collection["Destination"]) )
             {
-               
-                ViewBag.Message = "La fecha proporcionada debe ser mayor o igual a la fecha actual";
+                ViewBag.Message = "Por favor verifique que la fecha ingresada sea mayor o igual a la actual y que origen y destino sean distintos";
                 return View("~/Views/VuelosDisponibles/Index.cshtml");
             }
+            try
+            {
+                FlightModel model = new FlightModel();
+                UpdateModel<FlightModel>(model);
+                model.From = date.ToString("yyyy-MM-dd");
 
-            FlightModel model = new FlightModel();
-            UpdateModel<FlightModel>(model);
-            model.From = date.ToString("yyyy-MM-dd");
+                string urlWebService = $"http://testapi.vivaair.com/otatest/api/values";
+                //Se envia la petición al Web Service solicitando los datos del usuario creado
+                var responseServer = _serviceRequest.Send<FlightModel>(urlWebService, model, "POST");
+                var responseJSON = JsonConvert.DeserializeObject(responseServer.Data.ToString()).ToString();
+                LinkedList<DataFlightModel> dataFlight = JsonConvert.DeserializeObject<LinkedList<DataFlightModel>>(responseJSON);
 
-            string urlWebService = $"http://testapi.vivaair.com/otatest/api/values";
-
-            //Se envia la petición al Web Service solicitando los datos del usuario creado
-            var responseServer = _serviceRequest.Send<FlightModel>(urlWebService, model,"POST");
-            var responseJSON = JsonConvert.DeserializeObject(responseServer.Data.ToString()).ToString();
-            LinkedList<DataFlightModel> dataFlight = JsonConvert.DeserializeObject<LinkedList<DataFlightModel>>(responseJSON);
-            
-            FlightModel flight = new FlightModel();
-            flight.DataFlight = dataFlight;
-            return View("~/Views/VuelosDisponibles/Index.cshtml",flight);
+                FlightModel flight = new FlightModel();
+                flight.DataFlight = dataFlight;
+                return View("~/Views/VuelosDisponibles/Index.cshtml", flight);
+            }catch(Exception ex)
+            {
+                Logger logger = LogManager.GetCurrentClassLogger();
+                logger.Error(ex, "Ocurrió un error al intentar cargar el recurso externo del API");
+                return View("~/Views/VuelosDisponibles/Index.cshtml");
+            }
         }
 
       
@@ -81,67 +86,21 @@ namespace FrontendAerolineasNewShore.Controllers
 
                 if (codeResponse.Equals("201"))
                 {
-                    ViewBag.Message = "El registro ha sido exitoso";
-                    return View("~/Views/VuelosDisponibles/Index.cshtml");
+                    ViewBag.Message = "El registro del vuelo ha sido exitoso";
                 }
                 else
                 {
-                    ViewBag.Message = "El registro no creado, aségurese de que su email no esté previamente registrado o que su documento";
+                    ViewBag.Message = "Registro no insertado, por favor vuelve ha intentar";
                 }
-
                 return View("~/Views/VuelosDisponibles/Index.cshtml");
-
-                // TODO: Add insert logic here
             }
             catch (Exception ex)
             {
+                Logger logger = LogManager.GetCurrentClassLogger();
+                logger.Error(ex, "Ha ocurrido un error al intentar insertar el recurso en el Web API");
                 return View("~/Views/VuelosDisponibles/Index.cshtml");
-
             }
         }
 
-        // GET: VuelosDisponibles/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: VuelosDisponibles/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: VuelosDisponibles/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: VuelosDisponibles/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }
