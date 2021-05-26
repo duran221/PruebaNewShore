@@ -4,11 +4,11 @@ A continuación, se dará una breve introducción a la estructura interna del pr
 El código fuente consta de una solución desarrollada usando un enfoque de arquitectura en CAPAS, la cual a su vez contiene Cinco proyectos los cuales serán descritos a continuación:
 
 ![](/DOC/preview1.JPG)
+### Estructura del proyecto:
 
 ## FrontendAerolineasNewShore
 Este proyecto contiene el **Cliente Web** el cual fué desarrollado en ASP .NET FRAMEWORK y contiene las vistas y controladores que permiten consumir los servicios del REST api proporcionado para el ejercicio, así como el respectivo consumo de los servicios del API rest creada
 
-### Estructura del proyecto:
 
 
 ## Capa APIAerolineasNewShore
@@ -42,6 +42,7 @@ Clone la solución proporcionada en este repositorio y abra el IDE de Visual Stu
 
 
 Abra el asistete de bases de datos, se aconseja usar **Microsoft SQL Server Management Studio** y cree una base de datos con el nombre **NewShoreDB**
+![](/DOC/preview5.JPG)
 
 ![](/DOC/preview6.JPG)
 
