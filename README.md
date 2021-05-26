@@ -66,7 +66,7 @@ Para realizar una consulta sobre algún vuelo en específico no se hace necesari
 
 ![](/DOC/preview9.JPG)
 
-###Insertar un registro en base de datos: 
+### Insertar un registro en base de datos: 
 
 Dirigase a Visual estudio y ejecute también el proyecto **APIAerolineasNewShore** deberá obtener una página como la que se muestra a continuación esto es necesario ya que pone en marcha la Servicio Web creado para la insercion de base de datos de los registros de vuelo:
 Prueba insertar un registro.
@@ -80,7 +80,7 @@ La inserción puede ser corroborada consultando la tabla 'Flights':
 ![](/DOC/preview12.JPG)
 
 
-##Ejecución de Pruebas: 
+## Ejecución de Pruebas: 
 La solución consta de un proyecto de pruebas el cual usa NUNIT para su respectiva ejecución, aségurese de tener lo necesario para 
 ejecutar pruebas de NUNIT así como tener correctamente configurada la cadena de conexión, ejecute las pruebas, debería obtener un resultado como el siguiente para el caso de prueba especificado:
 
